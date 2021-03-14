@@ -1,0 +1,25 @@
+#!/usr/bin/env ruby
+
+puts "Installing Solargraph gem..."
+`gem install solargraph`
+
+puts "Installing documentation. This might take a while..."
+`solargraph download-core`
+`yard gems`
+`solargraph bundle`
+
+unless File.exist?('.solargraph.yml')
+  puts "Copying .solargraph.yml..."
+  `curl -s https://gist.githubusercontent.com/cmer/024991c85c4de01dab17632b2dc7f064/raw > .solargraph.yml`
+else
+  puts "Skipped copying .solargraph.yml. Already exists."
+end
+
+unless File.exist?('config/definitions.rb')
+  puts "Copying definitions.rb..."
+  `curl -s https://gist.githubusercontent.com/castwide/28b349566a223dfb439a337aea29713e/raw > config/definitions.rb`
+else
+  puts "Skipped copying .definitions.rb. Already exists."
+end
+
+puts "Done!"
