@@ -1,6 +1,6 @@
 # solargraph-rails-init
 
-A simple script to configure Solargraph to work with Rails that acts as a shortcut to the following commands:
+A simple script that configures Solargraph to work with Rails. It acts as a shortcut to the following commands:
 
 ```bash
 gem install solargraph
@@ -16,7 +16,7 @@ curl -s https://gist.githubusercontent.com/castwide/28b349566a223dfb439a337aea29
 
 Run the following commands in your Rails app root directory:
 
-```ruby
+```bash
 gem install solargraph-rails-init
 solargraph-rails-init
 ```

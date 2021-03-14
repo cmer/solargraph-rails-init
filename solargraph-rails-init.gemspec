@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Carl Mercier"]
   spec.email         = ["foss@carlmercier.com"]
 
-  spec.summary       = "A simple script to initialize a Rails app to use Solargraph"
-  spec.description   = "A simple script to initialize a Rails app to use Solargraph"
+  spec.summary       = "A simple script that configures Solargraph to work with Rails."
+  spec.description   = "A simple script that configures Solargraph to work with Rails."
   spec.homepage      = "https://github.com/cmer/solargraph-rails-init"
   spec.license       = "MIT"
   spec.required_ruby_version = Gem::Requirement.new(">= 2.4.0")
