@@ -21,6 +21,7 @@ gem install solargraph-rails-init
 solargraph-rails-init
 ```
 
+Run `solargraph-rails-init` again if you install new gems or change your Ruby version.
 
 ## Inspiration
 
