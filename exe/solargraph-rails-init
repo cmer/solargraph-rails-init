@@ -1,25 +1,81 @@
 #!/usr/bin/env ruby
 
-puts "Installing Solargraph gem..."
-`gem install solargraph`
+require 'optparse'
+require 'yaml'
 
-puts "Installing documentation. This might take a while..."
-`solargraph download-core`
-`yard gems`
-`solargraph bundle`
+SOLARGRAPH_YML = ".solargraph.yml"
+DEFINITIONS_RB = "config/definitions.rb"
 
-unless File.exist?('.solargraph.yml')
-  puts "Copying .solargraph.yml..."
-  `curl -s https://gist.githubusercontent.com/cmer/024991c85c4de01dab17632b2dc7f064/raw > .solargraph.yml`
-else
-  puts "Skipped copying .solargraph.yml. Already exists."
+def run
+  parse_options
+  exec_cmd "gem install solargraph",   title: "Installing Solargraph gem..."
+  exec_cmd "solargraph download-core", title: "Installing documentation. This might take a while..."
+  exec_cmd "yard gems"
+  exec_cmd "solargraph bundle"
+
+  unless File.exist?(SOLARGRAPH_YML)
+    exec_cmd "curl -s https://gist.githubusercontent.com/cmer/024991c85c4de01dab17632b2dc7f064/raw > #{SOLARGRAPH_YML}", title: "Copying .solargraph.yml..."
+  else
+    puts "Skipped copying .solargraph.yml. Already exists."
+  end
+
+  unless File.exist?(DEFINITIONS_RB)
+    exec_cmd "curl -s https://gist.githubusercontent.com/castwide/28b349566a223dfb439a337aea29713e/raw > #{DEFINITIONS_RB}", title: "Copying definitions.rb..."
+  else
+    puts "Skipped copying .definitions.rb. Already exists."
+  end
+
+  install_sgr if install_sgr?
+
+  puts "Done!"
 end
 
-unless File.exist?('config/definitions.rb')
-  puts "Copying definitions.rb..."
-  `curl -s https://gist.githubusercontent.com/castwide/28b349566a223dfb439a337aea29713e/raw > config/definitions.rb`
-else
-  puts "Skipped copying .definitions.rb. Already exists."
+def exec_cmd(cmd, title: nil)
+  puts title if title
+  out = `#{cmd}`
+  if $? != 0
+    puts out
+    puts "\nAn error as occured. Aborting.\n"
+    exit 1
+  end
 end
 
-puts "Done!"
+def install_sgr?
+  @options[:sgr]
+end
+
+def install_sgr
+  exec_cmd "gem install solargraph-rails --pre", title: "Installing `solargraph-rails` gem..."
+
+  puts "Add `solargraph-rails` plugin to #{SOLARGRAPH_YML}"
+  h = YAML.load_file(SOLARGRAPH_YML)
+  h['plugins'] ||= []
+  h['plugins'] << 'solargraph-rails' unless h['plugins'].include?('solargraph-rails')
+
+  File.open(SOLARGRAPH_YML, "w") do |file|
+    file.write h .to_yaml
+  end
+end
+
+def parse_options
+  @options = {}
+  optparse = OptionParser.new do |opts|
+    # Set a banner, displayed at the top of the help screen.
+    opts.banner = "Usage: solargraph-rails-init [options]"
+
+    @options[:sgr] = false
+    opts.on('-g', '--solargraph-rails-gem', 'Install and configure the solargraph-rails gem') do
+      @options[:sgr] = true
+    end
+
+    # This displays the help screen, all programs are assumed to have this option.
+    opts.on('-h', '--help', 'Display this screen') do
+      puts opts
+      exit
+    end
+  end
+
+  optparse.parse!
+end
+
+run

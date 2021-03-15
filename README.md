@@ -4,6 +4,7 @@ A simple script that configures Solargraph to work with Rails. It acts as a shor
 
 ```bash
 gem install solargraph
+gem install solargraph-rails --pre  # if --solargraph-rails-gem is specified
 solargraph download-core
 yard gems
 solargraph bundle
@@ -12,13 +13,17 @@ curl -s https://gist.githubusercontent.com/castwide/28b349566a223dfb439a337aea29
 ```
 
 
-## Installation
+## Installation & Usage
 
 Run the following commands in your Rails app root directory:
 
 ```bash
 gem install solargraph-rails-init
 solargraph-rails-init
+
+# See also:
+solargraph-rails-init --help
+solargraph-rails-init --solargraph-rails-gem # also add/initialize the optional solargraph-rails gem
 ```
 
 Run `solargraph-rails-init` again if you install new gems or change your Ruby version.
