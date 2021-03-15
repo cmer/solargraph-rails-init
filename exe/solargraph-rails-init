@@ -46,8 +46,11 @@ end
 
 def install_sgr
   exec_cmd "gem install solargraph-rails --pre", title: "Installing `solargraph-rails` gem..."
+  exec_cmd "bundle add annotate", title: "Adding `annotate` gem to Gemfile..."
+  exec_cmd "rails g annotate:install", title: "Initializing `annotate` gem..."
+  exec_cmd "rake annotate_models", title: "Annotating models..."
 
-  puts "Add `solargraph-rails` plugin to #{SOLARGRAPH_YML}"
+  puts "Adding `solargraph-rails` plugin to #{SOLARGRAPH_YML}..."
   h = YAML.load_file(SOLARGRAPH_YML)
   h['plugins'] ||= []
   h['plugins'] << 'solargraph-rails' unless h['plugins'].include?('solargraph-rails')
