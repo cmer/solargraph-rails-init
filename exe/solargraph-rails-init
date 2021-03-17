@@ -8,6 +8,12 @@ DEFINITIONS_RB = "config/definitions.rb"
 
 def run
   parse_options
+
+  unless is_rails?
+    puts "Must run from a Rails app folder. Aborting."
+    exit 1
+  end
+
   exec_cmd "gem install solargraph",   title: "Installing Solargraph gem..."
   exec_cmd "solargraph download-core", title: "Installing documentation. This might take a while..."
   exec_cmd "yard gems"
@@ -28,6 +34,10 @@ def run
   install_sgr if install_sgr?
 
   puts "Done!"
+end
+
+def is_rails?
+  File.exist?(File.join(Dir.pwd, './bin/rails'))
 end
 
 def exec_cmd(cmd, title: nil)
