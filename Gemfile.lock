@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    solargraph-rails-init (0.2.1)
+    solargraph-rails-init (0.2.2)
 
 GEM
   remote: https://rubygems.org/
@@ -9,6 +9,7 @@ GEM
     rake (13.0.3)
 
 PLATFORMS
+  ruby
   x86_64-darwin-20
 
 DEPENDENCIES
